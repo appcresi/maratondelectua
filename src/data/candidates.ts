@@ -45,6 +45,8 @@ export const categories: Category[] = [
       { id: "personaje-17", title: "Las Chicas Superpoderosas", src: "/fotos/personaje17.jpeg" },
       { id: "personaje-18", title: "Harry Potter (1)", description: "Harry Potter", src: "/fotos/personaje18.jpeg" },
       { id: "personaje-19", title: "Harry Potter (2)", description: "Harry Potter", src: "/fotos/personaje19.jpeg" },
+      { id: "personaje-20", title: "Neo", description: "Matrix", src: "/fotos/personaje20.jpeg" },
+      { id: "personaje-21", title: "Personaje 21", description: "Matrix", src: "/fotos/personaje21.jpeg" },
     ],
   },
   {
