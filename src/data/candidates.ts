@@ -42,6 +42,9 @@ export const categories: Category[] = [
       { id: "personaje-14", title: "Personaje 14", description: "Paw Patrol", src: "/fotos/personaje14.jpeg" },
       { id: "personaje-15", title: "Marshall", description: "Paw Patrol", src: "/fotos/personaje15.jpeg" },
       { id: "personaje-16", title: "Personaje 16", src: "/fotos/personaje16.jpeg" },
+      { id: "personaje-17", title: "Las Chicas Superpoderosas", src: "/fotos/personaje17.jpeg" },
+      { id: "personaje-18", title: "Harry Potter (1)", description: "Harry Potter", src: "/fotos/personaje18.jpeg" },
+      { id: "personaje-19", title: "Harry Potter (2)", description: "Harry Potter", src: "/fotos/personaje19.jpeg" },
     ],
   },
   {
@@ -57,6 +60,7 @@ export const categories: Category[] = [
       { id: "stand-5", title: "Superheroínas", src: "/fotos/stand5.jpeg" },
       { id: "stand-6", title: "Alicia en el País de las Maravillas", src: "/fotos/stand6.jpeg" },
       { id: "stand-7", title: "Tortugas Ninja", src: "/fotos/stan7.jpeg" },
+      { id: "stand-9", title: "Aventuras con los Kratts", src: "/fotos/stand9.jpeg" },
     ],
   },
 ];
