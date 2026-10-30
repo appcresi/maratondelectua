@@ -47,6 +47,7 @@ export const categories: Category[] = [
       { id: "personaje-19", title: "Harry Potter (2)", description: "Harry Potter", src: "/fotos/personaje19.jpeg" },
       { id: "personaje-20", title: "Neo", description: "Matrix", src: "/fotos/personaje20.jpeg" },
       { id: "personaje-21", title: "Personaje 21", description: "Matrix", src: "/fotos/personaje21.jpeg" },
+      { id: "personaje-22", title: "Alicia", description: "Alicia en el País de las Maravillas", src: "/fotos/personaje22.jpeg" },
     ],
   },
   {
