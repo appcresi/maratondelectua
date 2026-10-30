@@ -1,8 +1,8 @@
 // Horario de la votación (hora de Argentina, UTC-3).
 // IMPORTANTE: si cambias estas fechas, actualiza también los valores
 // en milisegundos de firestore.rules (función votingOpen) y vuelve a publicarlas.
-export const VOTING_OPENS_AT = new Date("2026-10-30T16:20:00-03:00");
-export const VOTING_CLOSES_AT = new Date("2026-10-30T16:45:00-03:00");
+export const VOTING_OPENS_AT = new Date("2026-10-30T16:35:00-03:00");
+export const VOTING_CLOSES_AT = new Date("2026-10-30T16:55:00-03:00");
 
 export type VotingStatus = "before" | "open" | "closed";
 

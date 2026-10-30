@@ -28,8 +28,9 @@ export const categories: Category[] = [
     candidates: [
       { id: "personaje-1", title: "Personaje 1", src: "/fotos/personaje1.jpeg" },
       { id: "personaje-2", title: "Personaje 2", src: "/fotos/personaje2.jpeg" },
-      { id: "personaje-3", title: "Personaje 3", src: "/fotos/personaje3.jpeg" },
-      { id: "personaje-4", title: "Personaje 4", src: "/fotos/personaje4.jpeg" },
+      { id: "personaje-3", title: "Gato de Cheshire", description: "Alicia en el País de las Maravillas", src: "/fotos/personaje3.jpeg" },
+      { id: "personaje-4", title: "Reina Blanca", description: "Alicia en el País de las Maravillas", src: "/fotos/personaje4.jpeg" },
+      { id: "personaje-5", title: "Conejo Blanco", description: "Alicia en el País de las Maravillas", src: "/fotos/personaje5.jpeg" },
     ],
   },
   {
@@ -43,6 +44,7 @@ export const categories: Category[] = [
       { id: "stand-3", title: "Paw Patrol", src: "/fotos/stand3.jpeg" },
       { id: "stand-4", title: "Son como niños", src: "/fotos/stand4.jpeg" },
       { id: "stand-5", title: "Superheroínas", src: "/fotos/stand5.jpeg" },
+      { id: "stand-6", title: "Alicia en el País de las Maravillas", src: "/fotos/stand6.jpeg" },
     ],
   },
 ];
