@@ -35,6 +35,10 @@ export const categories: Category[] = [
       { id: "personaje-7", title: "Ryder", description: "Paw Patrol", src: "/fotos/personaje7.jpeg" },
       { id: "personaje-8", title: "Chase", description: "Paw Patrol", src: "/fotos/personaje8.jpeg" },
       { id: "personaje-9", title: "Personaje 9", description: "Paw Patrol", src: "/fotos/personaje9.jpeg" },
+      { id: "personaje-10", title: "Personaje 10", src: "/fotos/personaje10.jpeg" },
+      { id: "personaje-11", title: "Personaje 11", src: "/fotos/personaje11.jpeg" },
+      { id: "personaje-12", title: "Personaje 12", src: "/fotos/personaje12.jpeg" },
+      { id: "personaje-13", title: "Personaje 13", src: "/fotos/personaje13.jpeg" },
     ],
   },
   {
