@@ -8,6 +8,7 @@ import type { Category } from "@/data/candidates";
 import {
   VOTING_CLOSES_AT,
   VOTING_OPENS_AT,
+  formatDateTime,
   formatTime,
   getVotingStatus,
   type VotingStatus,
@@ -26,11 +27,11 @@ function useVotingStatus(): VotingStatus | null {
 
 const STATUS_BANNER: Record<VotingStatus, { text: string; className: string }> = {
   before: {
-    text: `La votación abre a las ${formatTime(VOTING_OPENS_AT)} y cierra a las ${formatTime(VOTING_CLOSES_AT)}.`,
+    text: `La votación abre a las ${formatTime(VOTING_OPENS_AT)} y cierra el ${formatDateTime(VOTING_CLOSES_AT)}.`,
     className: "bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300",
   },
   open: {
-    text: `¡La votación está abierta! Cierra a las ${formatTime(VOTING_CLOSES_AT)}.`,
+    text: `¡La votación está abierta! Cierra el ${formatDateTime(VOTING_CLOSES_AT)}.`,
     className: "bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300",
   },
   closed: {
