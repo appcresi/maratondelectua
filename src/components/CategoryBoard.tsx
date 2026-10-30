@@ -88,7 +88,7 @@ export default function CategoryBoard({ category, user, authReady, status, onLog
                 isMine ? "border-emerald-500 ring-2 ring-emerald-500" : "border-zinc-200 dark:border-zinc-800"
               }`}
             >
-              <div className="relative aspect-[4/3] w-full">
+              <div className="relative aspect-[3/4] w-full">
                 <Image
                   src={c.src}
                   alt={c.title}
