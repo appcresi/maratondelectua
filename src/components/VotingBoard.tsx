@@ -2,8 +2,8 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { onAuthStateChanged, signInAnonymously, type User } from "firebase/auth";
-import { auth } from "@/lib/firebase";
+import { onAuthStateChanged, signOut, type User } from "firebase/auth";
+import { auth, signInWithGoogle } from "@/lib/firebase";
 import {
   AlreadyVotedError,
   castVote,
@@ -14,18 +14,18 @@ import type { Candidate } from "@/data/candidates";
 
 export default function VotingBoard({ candidates }: { candidates: Candidate[] }) {
   const [user, setUser] = useState<User | null>(null);
+  const [authReady, setAuthReady] = useState(false);
   const [myVote, setMyVote] = useState<string | null>(null);
   const [counts, setCounts] = useState<Record<string, number>>({});
   const [pending, setPending] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  // Inicia sesión anónima: cada navegador obtiene un uid estable.
   useEffect(() => {
-    const unsub = onAuthStateChanged(auth, (u) => {
-      if (u) setUser(u);
-      else signInAnonymously(auth).catch(() => setError("No se pudo iniciar sesión."));
+    return onAuthStateChanged(auth, (u) => {
+      setUser(u);
+      setAuthReady(true);
+      if (!u) setMyVote(null);
     });
-    return unsub;
   }, []);
 
   useEffect(() => subscribeToResults(setCounts), []);
@@ -37,6 +37,18 @@ export default function VotingBoard({ candidates }: { candidates: Candidate[] })
 
   const total = candidates.reduce((sum, c) => sum + (counts[c.id] ?? 0), 0);
   const hasVoted = myVote !== null;
+
+  async function handleLogin() {
+    setError(null);
+    try {
+      await signInWithGoogle();
+    } catch (e) {
+      // Cerrar la ventana emergente no es un error que haya que mostrar.
+      if ((e as { code?: string }).code !== "auth/popup-closed-by-user") {
+        setError("No se pudo iniciar sesión con Google.");
+      }
+    }
+  }
 
   async function handleVote(imageId: string) {
     if (!user || hasVoted || pending) return;
@@ -53,6 +65,45 @@ export default function VotingBoard({ candidates }: { candidates: Candidate[] })
 
   return (
     <div className="w-full">
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-zinc-200 bg-white px-4 py-3 text-sm dark:border-zinc-800 dark:bg-zinc-900">
+        {!authReady ? (
+          <span className="text-zinc-500">Cargando...</span>
+        ) : user ? (
+          <>
+            <span className="flex items-center gap-2">
+              {user.photoURL && (
+                <Image
+                  src={user.photoURL}
+                  alt=""
+                  width={28}
+                  height={28}
+                  className="rounded-full"
+                />
+              )}
+              <span>
+                Hola, <strong>{user.displayName ?? user.email}</strong>
+              </span>
+            </span>
+            <button
+              onClick={() => signOut(auth)}
+              className="text-zinc-500 underline-offset-4 hover:text-zinc-900 hover:underline dark:hover:text-white"
+            >
+              Cerrar sesión
+            </button>
+          </>
+        ) : (
+          <>
+            <span className="text-zinc-600 dark:text-zinc-400">Inicia sesión para votar.</span>
+            <button
+              onClick={handleLogin}
+              className="rounded-lg bg-zinc-900 px-4 py-2 font-medium text-white transition hover:bg-zinc-700 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-200"
+            >
+              Iniciar sesión con Google
+            </button>
+          </>
+        )}
+      </div>
+
       <div className="mb-6 flex flex-wrap items-center justify-between gap-2 text-sm text-zinc-600 dark:text-zinc-400">
         <span>
           {hasVoted ? "¡Gracias por votar! Estos son los resultados en vivo." : "Elige tu imagen favorita. Solo puedes votar una vez."}
@@ -114,11 +165,11 @@ export default function VotingBoard({ candidates }: { candidates: Candidate[] })
                   </div>
                 ) : (
                   <button
-                    onClick={() => handleVote(c.id)}
-                    disabled={!user || pending !== null}
+                    onClick={() => (user ? handleVote(c.id) : handleLogin())}
+                    disabled={!authReady || pending !== null}
                     className="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-zinc-700 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-200"
                   >
-                    {pending === c.id ? "Votando..." : "Votar"}
+                    {pending === c.id ? "Votando..." : user ? "Votar" : "Inicia sesión para votar"}
                   </button>
                 )}
               </div>
