@@ -39,6 +39,9 @@ export const categories: Category[] = [
       { id: "personaje-11", title: "Beetlejuice", description: "Beetlejuice", src: "/fotos/personaje11.jpeg" },
       { id: "personaje-12", title: "Eduardo Manos de Tijera", description: "El joven manos de tijera", src: "/fotos/personaje12.jpeg" },
       { id: "personaje-13", title: "Sombrerero Loco", description: "Alicia en el País de las Maravillas", src: "/fotos/personaje13.jpeg" },
+      { id: "personaje-14", title: "Personaje 14", src: "/fotos/personaje14.jpeg" },
+      { id: "personaje-15", title: "Personaje 15", src: "/fotos/personaje15.jpeg" },
+      { id: "personaje-16", title: "Personaje 16", src: "/fotos/personaje16.jpeg" },
     ],
   },
   {
