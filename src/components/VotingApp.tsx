@@ -69,8 +69,11 @@ function Countdown({ now, status }: { now: number; status: VotingStatus }) {
         <div key={u.label} className="flex items-start gap-2">
           {i > 0 && <span className="pt-1 font-display text-3xl text-gold">:</span>}
           <div className="text-center">
-            <span className="block min-w-[3ch] rounded-md bg-accent px-2 py-1 font-display text-3xl font-bold tabular-nums text-accent-ink">
-              {String(u.value).padStart(2, "0")}
+            <span className="block min-w-[3ch] overflow-hidden rounded-md bg-accent px-2 py-1 font-display text-3xl font-bold tabular-nums text-accent-ink shadow-md">
+              {/* La clave cambia con el número, así cada cambio dispara el "tic". */}
+              <span key={u.value} className="inline-block animate-tick">
+                {String(u.value).padStart(2, "0")}
+              </span>
             </span>
             <span className="mt-1 block text-xs uppercase tracking-wider text-muted">{u.label}</span>
           </div>
@@ -125,7 +128,7 @@ export default function VotingApp({ categories }: { categories: Category[] }) {
   return (
     <div className="w-full">
       {now !== null && status && (
-        <section className="mb-6 grid gap-6 rounded-lg border border-line bg-card p-5 shadow-sm sm:grid-cols-2">
+        <section className="mb-6 grid animate-fade-up gap-6 rounded-lg border border-line bg-card p-5 shadow-sm sm:grid-cols-2">
           <div className="text-center sm:text-left">
             <h2 className="mb-3 text-sm uppercase tracking-[0.2em] text-gold">
               {status === "before" ? "La votación abre en" : status === "open" ? "La votación cierra en" : "Fin de la votación"}
@@ -139,8 +142,13 @@ export default function VotingApp({ categories }: { categories: Category[] }) {
             <ul className="flex justify-center gap-8 sm:justify-start">
               {categories.map((c) => (
                 <li key={c.id}>
-                  <span className="block font-display text-4xl font-bold tabular-nums">{voters[c.id] ?? 0}</span>
-                  <span className="text-sm text-muted">
+                  <span
+                    key={voters[c.id] ?? 0}
+                    className="inline-block animate-pop font-display text-4xl font-bold tabular-nums"
+                  >
+                    {voters[c.id] ?? 0}
+                  </span>
+                  <span className="block text-sm text-muted">
                     <span aria-hidden="true">{c.icon}</span> {c.name}
                   </span>
                 </li>
@@ -175,7 +183,7 @@ export default function VotingApp({ categories }: { categories: Category[] }) {
             <span className="italic text-muted">Inicia sesión para votar.</span>
             <button
               onClick={handleLogin}
-              className="rounded-md bg-accent px-4 py-2 font-display font-semibold text-accent-ink transition hover:opacity-90"
+              className="rounded-md bg-accent px-4 py-2 font-display font-semibold text-accent-ink transition hover:scale-[1.03] hover:opacity-90 active:scale-95"
             >
               Iniciar sesión con Google
             </button>
@@ -205,7 +213,10 @@ export default function VotingApp({ categories }: { categories: Category[] }) {
                   : "border-transparent text-muted hover:text-ink"
               }`}
             >
-              <span aria-hidden="true" className="text-2xl leading-none">
+              <span
+                aria-hidden="true"
+                className={`text-2xl leading-none transition-transform duration-300 ${selected ? "scale-125 animate-bob" : ""}`}
+              >
                 {c.icon}
               </span>
               {c.name}
