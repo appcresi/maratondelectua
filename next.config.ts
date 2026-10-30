@@ -7,8 +7,6 @@ const nextConfig: NextConfig = {
   images: {
     // Dominios permitidos para imágenes remotas.
     remotePatterns: [
-      { protocol: "https", hostname: "picsum.photos" },
-      { protocol: "https", hostname: "fastly.picsum.photos" },
       { protocol: "https", hostname: "firebasestorage.googleapis.com" },
       // Fotos de perfil de Google
       { protocol: "https", hostname: "lh3.googleusercontent.com" },
