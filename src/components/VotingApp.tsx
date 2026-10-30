@@ -40,6 +40,19 @@ const STATUS_BANNER: Record<VotingStatus, { text: string; className: string }> =
   },
 };
 
+const LOGIN_ERRORS: Record<string, string> = {
+  "auth/unauthorized-domain":
+    "Este dominio no está autorizado en Firebase (Authentication → Configuración → Dominios autorizados).",
+  "auth/operation-not-allowed": "El inicio de sesión con Google no está habilitado en Firebase.",
+  "auth/configuration-not-found": "El inicio de sesión con Google no está habilitado en Firebase.",
+  "auth/invalid-api-key": "Faltan las variables de entorno de Firebase en el servidor.",
+  "auth/api-key-not-valid.-please-pass-a-valid-api-key.": "Faltan las variables de entorno de Firebase en el servidor.",
+  "auth/popup-blocked": "El navegador bloqueó la ventana de Google. Permite las ventanas emergentes e inténtalo de nuevo.",
+  "auth/operation-not-supported-in-this-environment":
+    "Este navegador no permite iniciar sesión. Abre el link en Chrome o Safari.",
+  "auth/network-request-failed": "Sin conexión a internet. Inténtalo de nuevo.",
+};
+
 export default function VotingApp({ categories }: { categories: Category[] }) {
   const status = useVotingStatus();
   const [user, setUser] = useState<User | null>(null);
@@ -59,10 +72,10 @@ export default function VotingApp({ categories }: { categories: Category[] }) {
     try {
       await signInWithGoogle();
     } catch (e) {
+      const code = (e as { code?: string }).code ?? "desconocido";
       // Cerrar la ventana emergente no es un error que haya que mostrar.
-      if ((e as { code?: string }).code !== "auth/popup-closed-by-user") {
-        setError("No se pudo iniciar sesión con Google.");
-      }
+      if (code === "auth/popup-closed-by-user" || code === "auth/cancelled-popup-request") return;
+      setError(`${LOGIN_ERRORS[code] ?? "No se pudo iniciar sesión con Google."} (${code})`);
     }
   }
 
