@@ -23,10 +23,8 @@ export const categories: Category[] = [
     name: "Disfraces",
     description: "Vota por el personaje mejor caracterizado.",
     candidates: [
-      { id: "personaje-1", title: "Personaje 1", description: "Libro: ...", src: "https://picsum.photos/seed/disfraz1/600/800" },
-      { id: "personaje-2", title: "Personaje 2", description: "Libro: ...", src: "https://picsum.photos/seed/disfraz2/600/800" },
-      { id: "personaje-3", title: "Personaje 3", description: "Libro: ...", src: "https://picsum.photos/seed/disfraz3/600/800" },
-      { id: "personaje-4", title: "Personaje 4", description: "Libro: ...", src: "https://picsum.photos/seed/disfraz4/600/800" },
+      { id: "personaje-1", title: "Personaje 1", src: "/fotos/personaje1.jpeg" },
+      { id: "personaje-2", title: "Personaje 2", src: "/fotos/personaje2.jpeg" },
     ],
   },
   {
@@ -34,10 +32,8 @@ export const categories: Category[] = [
     name: "Stands",
     description: "Vota por el stand más creativo.",
     candidates: [
-      { id: "stand-1", title: "South Park", description: "Curso: ...", src: "/fotos/stand1.jpeg" },
-      { id: "stand-2", title: "Stand 2", description: "Curso: ...", src: "https://picsum.photos/seed/stand2/600/800" },
-      { id: "stand-3", title: "Stand 3", description: "Curso: ...", src: "https://picsum.photos/seed/stand3/600/800" },
-      { id: "stand-4", title: "Stand 4", description: "Curso: ...", src: "https://picsum.photos/seed/stand4/600/800" },
+      { id: "stand-1", title: "South Park", src: "/fotos/stand1.jpeg" },
+      { id: "stand-2", title: "Harry Potter", src: "/fotos/stand2.jpeg" },
     ],
   },
 ];
