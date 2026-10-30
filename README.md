@@ -1,4 +1,4 @@
-# Votación de imágenes
+# Maratón de Lectura — Votación
 
 Next.js + TypeScript + Tailwind + Firebase (Firestore + inicio de sesión con Google).
 
@@ -14,7 +14,7 @@ Next.js + TypeScript + Tailwind + Firebase (Firestore + inicio de sesión con Go
    ```bash
    cp .env.local.example .env.local   # y completa los valores
    ```
-6. Edita las imágenes en `src/data/candidates.ts` (puedes poner archivos en `public/`).
+6. Edita los disfraces y stands en `src/data/candidates.ts` (puedes poner las fotos en `public/`).
 
 ## Desarrollo
 
@@ -27,8 +27,9 @@ Abre http://localhost:3000.
 ## Cómo funciona
 
 - Cada persona inicia sesión con su cuenta de Google y obtiene un `uid`.
-- `votes/{uid}` guarda el voto de cada persona (solo uno por uid).
-- `results/{imageId}` guarda el contador de votos de cada imagen.
+- Hay dos categorías: **Disfraces** y **Stands**. Cada persona vota una vez en cada una.
+- `categories/{categoria}/votes/{uid}` guarda el voto de cada persona.
+- `categories/{categoria}/results/{id}` guarda el contador de votos de cada participante.
 - El voto se registra en una transacción y las reglas de Firestore impiden votar dos veces
   o manipular los contadores.
 - Los resultados se actualizan en tiempo real.
