@@ -57,7 +57,7 @@ export const categories: Category[] = [
     description: "Vota por el stand más creativo.",
     candidates: [
       { id: "stand-1", title: "South Park", src: "/fotos/stand1.jpeg" },
-      { id: "stand-2", title: "Harry Potter", src: "/fotos/stand2.jpeg" },
+      { id: "stand-2", title: "Harry Potter (1)", src: "/fotos/stand2.jpeg" },
       { id: "stand-3", title: "Paw Patrol", src: "/fotos/stand3.jpeg" },
       { id: "stand-4", title: "Son como niños", src: "/fotos/stand4.jpeg" },
       { id: "stand-5", title: "Superheroínas", src: "/fotos/stand5.jpeg" },
@@ -65,6 +65,7 @@ export const categories: Category[] = [
       { id: "stand-7", title: "Tortugas Ninja", src: "/fotos/stan7.jpeg" },
       { id: "stand-8", title: "Tim Burton", src: "/fotos/stand8.jpeg" },
       { id: "stand-9", title: "Aventuras con los Kratts", src: "/fotos/stand9.jpeg" },
+      { id: "stand-10", title: "Harry Potter (2)", src: "/fotos/stand10.jpeg" },
     ],
   },
 ];
