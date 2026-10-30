@@ -2,60 +2,47 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { onAuthStateChanged, signOut, type User } from "firebase/auth";
-import { auth, signInWithGoogle } from "@/lib/firebase";
+import type { User } from "firebase/auth";
 import {
   AlreadyVotedError,
   castVote,
   subscribeToMyVote,
   subscribeToResults,
 } from "@/lib/votes";
-import type { Candidate } from "@/data/candidates";
+import type { Category } from "@/data/candidates";
 
-export default function VotingBoard({ candidates }: { candidates: Candidate[] }) {
-  const [user, setUser] = useState<User | null>(null);
-  const [authReady, setAuthReady] = useState(false);
-  const [myVote, setMyVote] = useState<string | null>(null);
+type Props = {
+  category: Category;
+  user: User | null;
+  authReady: boolean;
+  onLogin: () => void;
+};
+
+export default function CategoryBoard({ category, user, authReady, onLogin }: Props) {
+  // Se guarda junto al uid para no mostrar el voto de una sesión anterior.
+  const [vote, setVote] = useState<{ uid: string; candidateId: string | null } | null>(null);
   const [counts, setCounts] = useState<Record<string, number>>({});
   const [pending, setPending] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    return onAuthStateChanged(auth, (u) => {
-      setUser(u);
-      setAuthReady(true);
-      if (!u) setMyVote(null);
-    });
-  }, []);
-
-  useEffect(() => subscribeToResults(setCounts), []);
+  useEffect(() => subscribeToResults(category.id, setCounts), [category.id]);
 
   useEffect(() => {
     if (!user) return;
-    return subscribeToMyVote(user.uid, setMyVote);
-  }, [user]);
+    const uid = user.uid;
+    return subscribeToMyVote(category.id, uid, (candidateId) => setVote({ uid, candidateId }));
+  }, [category.id, user]);
 
-  const total = candidates.reduce((sum, c) => sum + (counts[c.id] ?? 0), 0);
+  const myVote = user && vote?.uid === user.uid ? vote.candidateId : null;
+  const total = category.candidates.reduce((sum, c) => sum + (counts[c.id] ?? 0), 0);
   const hasVoted = myVote !== null;
 
-  async function handleLogin() {
-    setError(null);
-    try {
-      await signInWithGoogle();
-    } catch (e) {
-      // Cerrar la ventana emergente no es un error que haya que mostrar.
-      if ((e as { code?: string }).code !== "auth/popup-closed-by-user") {
-        setError("No se pudo iniciar sesión con Google.");
-      }
-    }
-  }
-
-  async function handleVote(imageId: string) {
+  async function handleVote(candidateId: string) {
     if (!user || hasVoted || pending) return;
-    setPending(imageId);
+    setPending(candidateId);
     setError(null);
     try {
-      await castVote(user.uid, imageId);
+      await castVote(category.id, user.uid, candidateId);
     } catch (e) {
       setError(e instanceof AlreadyVotedError ? e.message : "No se pudo registrar el voto.");
     } finally {
@@ -64,49 +51,12 @@ export default function VotingBoard({ candidates }: { candidates: Candidate[] })
   }
 
   return (
-    <div className="w-full">
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-zinc-200 bg-white px-4 py-3 text-sm dark:border-zinc-800 dark:bg-zinc-900">
-        {!authReady ? (
-          <span className="text-zinc-500">Cargando...</span>
-        ) : user ? (
-          <>
-            <span className="flex items-center gap-2">
-              {user.photoURL && (
-                <Image
-                  src={user.photoURL}
-                  alt=""
-                  width={28}
-                  height={28}
-                  className="rounded-full"
-                />
-              )}
-              <span>
-                Hola, <strong>{user.displayName ?? user.email}</strong>
-              </span>
-            </span>
-            <button
-              onClick={() => signOut(auth)}
-              className="text-zinc-500 underline-offset-4 hover:text-zinc-900 hover:underline dark:hover:text-white"
-            >
-              Cerrar sesión
-            </button>
-          </>
-        ) : (
-          <>
-            <span className="text-zinc-600 dark:text-zinc-400">Inicia sesión para votar.</span>
-            <button
-              onClick={handleLogin}
-              className="rounded-lg bg-zinc-900 px-4 py-2 font-medium text-white transition hover:bg-zinc-700 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-200"
-            >
-              Iniciar sesión con Google
-            </button>
-          </>
-        )}
-      </div>
-
+    <section>
       <div className="mb-6 flex flex-wrap items-center justify-between gap-2 text-sm text-zinc-600 dark:text-zinc-400">
         <span>
-          {hasVoted ? "¡Gracias por votar! Estos son los resultados en vivo." : "Elige tu imagen favorita. Solo puedes votar una vez."}
+          {hasVoted
+            ? "¡Gracias por votar! Estos son los resultados en vivo."
+            : `${category.description} Solo puedes votar una vez.`}
         </span>
         <span className="font-medium">Total de votos: {total}</span>
       </div>
@@ -118,7 +68,7 @@ export default function VotingBoard({ candidates }: { candidates: Candidate[] })
       )}
 
       <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {candidates.map((c) => {
+        {category.candidates.map((c) => {
           const votes = counts[c.id] ?? 0;
           const percent = total ? Math.round((votes / total) * 100) : 0;
           const isMine = myVote === c.id;
@@ -141,10 +91,15 @@ export default function VotingBoard({ candidates }: { candidates: Candidate[] })
               </div>
 
               <div className="flex flex-col gap-3 p-4">
-                <div className="flex items-center justify-between">
-                  <h2 className="font-semibold">{c.title}</h2>
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <h3 className="font-semibold">{c.title}</h3>
+                    {c.description && (
+                      <p className="text-sm text-zinc-500 dark:text-zinc-400">{c.description}</p>
+                    )}
+                  </div>
                   {isMine && (
-                    <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-medium text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">
+                    <span className="shrink-0 rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-medium text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">
                       Tu voto
                     </span>
                   )}
@@ -165,7 +120,7 @@ export default function VotingBoard({ candidates }: { candidates: Candidate[] })
                   </div>
                 ) : (
                   <button
-                    onClick={() => (user ? handleVote(c.id) : handleLogin())}
+                    onClick={() => (user ? handleVote(c.id) : onLogin())}
                     disabled={!authReady || pending !== null}
                     className="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-zinc-700 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-200"
                   >
@@ -177,6 +132,6 @@ export default function VotingBoard({ candidates }: { candidates: Candidate[] })
           );
         })}
       </ul>
-    </div>
+    </section>
   );
 }

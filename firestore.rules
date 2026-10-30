@@ -3,32 +3,39 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Un voto por usuario: el ID del documento es el uid.
-    match /votes/{uid} {
-      allow read: if request.auth != null && request.auth.uid == uid;
-      allow create: if request.auth != null
-        && request.auth.uid == uid
-        && request.resource.data.keys().hasOnly(['imageId', 'createdAt'])
-        && request.resource.data.imageId is string
-        && request.resource.data.createdAt == request.time;
-      allow update, delete: if false;
-    }
+    match /categories/{categoryId} {
 
-    // Contadores públicos. Solo se pueden sumar de 1 en 1 y únicamente
-    // en la misma escritura en que se crea el voto del usuario.
-    match /results/{imageId} {
-      allow read: if true;
-
-      function votingNow() {
-        return request.auth != null
-          && !exists(/databases/$(database)/documents/votes/$(request.auth.uid))
-          && getAfter(/databases/$(database)/documents/votes/$(request.auth.uid)).data.imageId == imageId
-          && request.resource.data.keys().hasOnly(['votes']);
+      // Un voto por usuario y categoría: el ID del documento es el uid.
+      match /votes/{uid} {
+        allow read: if request.auth != null && request.auth.uid == uid;
+        allow create: if request.auth != null
+          && request.auth.uid == uid
+          && request.resource.data.keys().hasOnly(['candidateId', 'createdAt'])
+          && request.resource.data.candidateId is string
+          && request.resource.data.createdAt == request.time;
+        allow update, delete: if false;
       }
 
-      allow create: if votingNow() && request.resource.data.votes == 1;
-      allow update: if votingNow() && request.resource.data.votes == resource.data.votes + 1;
-      allow delete: if false;
+      // Contadores públicos. Solo se pueden sumar de 1 en 1 y únicamente
+      // en la misma escritura en que se crea el voto del usuario.
+      match /results/{candidateId} {
+        allow read: if true;
+
+        function myVotePath() {
+          return /databases/$(database)/documents/categories/$(categoryId)/votes/$(request.auth.uid);
+        }
+
+        function votingNow() {
+          return request.auth != null
+            && !exists(myVotePath())
+            && getAfter(myVotePath()).data.candidateId == candidateId
+            && request.resource.data.keys().hasOnly(['votes']);
+        }
+
+        allow create: if votingNow() && request.resource.data.votes == 1;
+        allow update: if votingNow() && request.resource.data.votes == resource.data.votes + 1;
+        allow delete: if false;
+      }
     }
   }
 }

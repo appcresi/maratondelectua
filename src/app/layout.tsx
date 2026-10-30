@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Votación",
-  description: "Vota por tu imagen favorita",
+  title: "Maratón de Lectura",
+  description: "Votación de disfraces y stands",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
