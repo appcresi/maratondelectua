@@ -3,10 +3,10 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Horario de votación: 30/10/2026 de 16:00 a 16:45 (hora de Argentina, UTC-3).
+    // Horario de votación: 30/10/2026 de 16:20 a 16:45 (hora de Argentina, UTC-3).
     // Valores en milisegundos; deben coincidir con src/data/schedule.ts.
     function votingOpen() {
-      return request.time >= timestamp.value(1793386800000)
+      return request.time >= timestamp.value(1793388000000)
         && request.time < timestamp.value(1793389500000);
     }
 
