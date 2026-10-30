@@ -38,6 +38,8 @@ export default function CategoryBoard({ category, user, authReady, status, onLog
 
   const myVote = user && vote?.uid === user.uid ? vote.candidateId : null;
   const total = category.candidates.reduce((sum, c) => sum + (counts[c.id] ?? 0), 0);
+  // De más votado a menos votado; los empates mantienen el orden de la lista.
+  const ranked = [...category.candidates].sort((a, b) => (counts[b.id] ?? 0) - (counts[a.id] ?? 0));
   const hasVoted = myVote !== null;
   const isOpen = status === "open";
   // Al cerrar la votación todos ven los resultados, hayan votado o no.
@@ -76,7 +78,7 @@ export default function CategoryBoard({ category, user, authReady, status, onLog
       )}
 
       <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {category.candidates.map((c) => {
+        {ranked.map((c) => {
           const votes = counts[c.id] ?? 0;
           const percent = total ? Math.round((votes / total) * 100) : 0;
           const isMine = myVote === c.id;
