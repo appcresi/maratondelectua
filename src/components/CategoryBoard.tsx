@@ -10,15 +10,18 @@ import {
   subscribeToResults,
 } from "@/lib/votes";
 import type { Category } from "@/data/candidates";
+import { VOTING_OPENS_AT, formatTime, type VotingStatus } from "@/data/schedule";
 
 type Props = {
   category: Category;
   user: User | null;
   authReady: boolean;
+  /** null mientras aún no se conoce la hora en el navegador. */
+  status: VotingStatus | null;
   onLogin: () => void;
 };
 
-export default function CategoryBoard({ category, user, authReady, onLogin }: Props) {
+export default function CategoryBoard({ category, user, authReady, status, onLogin }: Props) {
   // Se guarda junto al uid para no mostrar el voto de una sesión anterior.
   const [vote, setVote] = useState<{ uid: string; candidateId: string | null } | null>(null);
   const [counts, setCounts] = useState<Record<string, number>>({});
@@ -36,9 +39,12 @@ export default function CategoryBoard({ category, user, authReady, onLogin }: Pr
   const myVote = user && vote?.uid === user.uid ? vote.candidateId : null;
   const total = category.candidates.reduce((sum, c) => sum + (counts[c.id] ?? 0), 0);
   const hasVoted = myVote !== null;
+  const isOpen = status === "open";
+  // Al cerrar la votación todos ven los resultados, hayan votado o no.
+  const showResults = hasVoted || status === "closed";
 
   async function handleVote(candidateId: string) {
-    if (!user || hasVoted || pending) return;
+    if (!user || hasVoted || pending || !isOpen) return;
     setPending(candidateId);
     setError(null);
     try {
@@ -54,9 +60,11 @@ export default function CategoryBoard({ category, user, authReady, onLogin }: Pr
     <section>
       <div className="mb-6 flex flex-wrap items-center justify-between gap-2 text-sm text-zinc-600 dark:text-zinc-400">
         <span>
-          {hasVoted
-            ? "¡Gracias por votar! Estos son los resultados en vivo."
-            : `${category.description} Solo puedes votar una vez.`}
+          {status === "closed"
+            ? "Resultados finales."
+            : hasVoted
+              ? "¡Gracias por votar! Estos son los resultados en vivo."
+              : `${category.description} Solo puedes votar una vez.`}
         </span>
         <span className="font-medium">Total de votos: {total}</span>
       </div>
@@ -105,7 +113,7 @@ export default function CategoryBoard({ category, user, authReady, onLogin }: Pr
                   )}
                 </div>
 
-                {hasVoted ? (
+                {showResults ? (
                   <div>
                     <div className="mb-1 flex justify-between text-sm">
                       <span>{votes} votos</span>
@@ -121,10 +129,16 @@ export default function CategoryBoard({ category, user, authReady, onLogin }: Pr
                 ) : (
                   <button
                     onClick={() => (user ? handleVote(c.id) : onLogin())}
-                    disabled={!authReady || pending !== null}
+                    disabled={!authReady || !isOpen || pending !== null}
                     className="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-zinc-700 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-200"
                   >
-                    {pending === c.id ? "Votando..." : user ? "Votar" : "Inicia sesión para votar"}
+                    {status === "before"
+                      ? `Abre a las ${formatTime(VOTING_OPENS_AT)}`
+                      : pending === c.id
+                        ? "Votando..."
+                        : user
+                          ? "Votar"
+                          : "Inicia sesión para votar"}
                   </button>
                 )}
               </div>

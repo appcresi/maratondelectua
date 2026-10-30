@@ -1,13 +1,46 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { onAuthStateChanged, signOut, type User } from "firebase/auth";
 import { auth, signInWithGoogle } from "@/lib/firebase";
 import type { Category } from "@/data/candidates";
+import {
+  VOTING_CLOSES_AT,
+  VOTING_OPENS_AT,
+  formatTime,
+  getVotingStatus,
+  type VotingStatus,
+} from "@/data/schedule";
 import CategoryBoard from "./CategoryBoard";
 
+// Revisa la hora cada segundo para abrir/cerrar la votación sin recargar.
+function subscribeToClock(onChange: () => void) {
+  const id = setInterval(onChange, 1000);
+  return () => clearInterval(id);
+}
+
+function useVotingStatus(): VotingStatus | null {
+  return useSyncExternalStore(subscribeToClock, () => getVotingStatus(), () => null);
+}
+
+const STATUS_BANNER: Record<VotingStatus, { text: string; className: string }> = {
+  before: {
+    text: `La votación abre a las ${formatTime(VOTING_OPENS_AT)} y cierra a las ${formatTime(VOTING_CLOSES_AT)}.`,
+    className: "bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300",
+  },
+  open: {
+    text: `¡La votación está abierta! Cierra a las ${formatTime(VOTING_CLOSES_AT)}.`,
+    className: "bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300",
+  },
+  closed: {
+    text: "La votación terminó. Estos son los resultados finales.",
+    className: "bg-zinc-200 text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200",
+  },
+};
+
 export default function VotingApp({ categories }: { categories: Category[] }) {
+  const status = useVotingStatus();
   const [user, setUser] = useState<User | null>(null);
   const [authReady, setAuthReady] = useState(false);
   const [activeId, setActiveId] = useState(categories[0]?.id);
@@ -36,6 +69,12 @@ export default function VotingApp({ categories }: { categories: Category[] }) {
 
   return (
     <div className="w-full">
+      {status && (
+        <p className={`mb-4 rounded-2xl px-4 py-3 text-center text-sm font-medium ${STATUS_BANNER[status].className}`}>
+          {STATUS_BANNER[status].text}
+        </p>
+      )}
+
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-zinc-200 bg-white px-4 py-3 text-sm dark:border-zinc-800 dark:bg-zinc-900">
         {!authReady ? (
           <span className="text-zinc-500">Cargando...</span>
@@ -98,6 +137,7 @@ export default function VotingApp({ categories }: { categories: Category[] }) {
         category={active}
         user={user}
         authReady={authReady}
+        status={status}
         onLogin={handleLogin}
       />
     </div>
