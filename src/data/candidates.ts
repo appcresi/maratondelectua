@@ -38,6 +38,8 @@ export const categories: Category[] = [
     candidates: [
       { id: "stand-1", title: "South Park", src: "/fotos/stand1.jpeg" },
       { id: "stand-2", title: "Harry Potter", src: "/fotos/stand2.jpeg" },
+      { id: "stand-3", title: "Paw Patrol", src: "/fotos/stand3.jpeg" },
+      { id: "stand-4", title: "Son como niños", src: "/fotos/stand4.jpeg" },
     ],
   },
 ];
