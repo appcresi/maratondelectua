@@ -63,6 +63,7 @@ export const categories: Category[] = [
       { id: "stand-5", title: "Superheroínas", src: "/fotos/stand5.jpeg" },
       { id: "stand-6", title: "Alicia en el País de las Maravillas", src: "/fotos/stand6.jpeg" },
       { id: "stand-7", title: "Tortugas Ninja", src: "/fotos/stan7.jpeg" },
+      { id: "stand-8", title: "Tim Burton", src: "/fotos/stand8.jpeg" },
       { id: "stand-9", title: "Aventuras con los Kratts", src: "/fotos/stand9.jpeg" },
     ],
   },
