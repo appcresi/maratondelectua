@@ -31,6 +31,10 @@ export const categories: Category[] = [
       { id: "personaje-3", title: "Gato de Cheshire", description: "Alicia en el País de las Maravillas", src: "/fotos/personaje3.jpeg" },
       { id: "personaje-4", title: "Reina Blanca", description: "Alicia en el País de las Maravillas", src: "/fotos/personaje4.jpeg" },
       { id: "personaje-5", title: "Conejo Blanco", description: "Alicia en el País de las Maravillas", src: "/fotos/personaje5.jpeg" },
+      { id: "personaje-6", title: "Personaje 6", src: "/fotos/personaje6.jpeg" },
+      { id: "personaje-7", title: "Ryder", description: "Paw Patrol", src: "/fotos/personaje7.jpeg" },
+      { id: "personaje-8", title: "Chase", description: "Paw Patrol", src: "/fotos/personaje8.jpeg" },
+      { id: "personaje-9", title: "Personaje 9", description: "Paw Patrol", src: "/fotos/personaje9.jpeg" },
     ],
   },
   {
@@ -45,6 +49,7 @@ export const categories: Category[] = [
       { id: "stand-4", title: "Son como niños", src: "/fotos/stand4.jpeg" },
       { id: "stand-5", title: "Superheroínas", src: "/fotos/stand5.jpeg" },
       { id: "stand-6", title: "Alicia en el País de las Maravillas", src: "/fotos/stand6.jpeg" },
+      { id: "stand-7", title: "Tortugas Ninja", src: "/fotos/stan7.jpeg" },
     ],
   },
 ];
