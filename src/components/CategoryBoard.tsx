@@ -58,19 +58,19 @@ export default function CategoryBoard({ category, user, authReady, status, onLog
 
   return (
     <section>
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-2 text-sm text-zinc-600 dark:text-zinc-400">
-        <span>
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-2 text-sm text-muted">
+        <span className="italic">
           {status === "closed"
             ? "Resultados finales."
             : hasVoted
               ? "¡Gracias por votar! Estos son los resultados en vivo."
               : `${category.description} Solo puedes votar una vez.`}
         </span>
-        <span className="font-medium">Total de votos: {total}</span>
+        <span className="font-semibold">Total de votos: {total}</span>
       </div>
 
       {error && (
-        <p className="mb-6 rounded-lg bg-red-100 px-4 py-3 text-sm text-red-700 dark:bg-red-950 dark:text-red-300">
+        <p className="mb-6 rounded-md border border-accent/40 bg-accent/10 px-4 py-3 text-sm text-accent">
           {error}
         </p>
       )}
@@ -84,44 +84,44 @@ export default function CategoryBoard({ category, user, authReady, status, onLog
           return (
             <li
               key={c.id}
-              className={`overflow-hidden rounded-2xl border bg-white shadow-sm transition dark:bg-zinc-900 ${
-                isMine ? "border-emerald-500 ring-2 ring-emerald-500" : "border-zinc-200 dark:border-zinc-800"
+              className={`relative rounded-sm border bg-card p-3 shadow-[4px_4px_0_0_var(--line)] transition ${
+                isMine ? "border-accent ring-2 ring-accent" : "border-line"
               }`}
             >
-              <div className="relative aspect-[3/4] w-full">
+              {isMine && (
+                // Señalador de libro sobre la tarjeta votada
+                <span
+                  className="absolute -top-1 right-5 z-10 bg-accent px-2 pb-4 pt-2 text-xs font-bold uppercase tracking-wider text-accent-ink [clip-path:polygon(0_0,100%_0,100%_100%,50%_80%,0_100%)]"
+                >
+                  Tu voto
+                </span>
+              )}
+
+              <div className="relative aspect-[3/4] w-full overflow-hidden border border-line">
                 <Image
                   src={c.src}
                   alt={c.title}
                   fill
                   sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                  className="object-cover"
+                  className="object-cover sepia-[.15]"
                 />
               </div>
 
-              <div className="flex flex-col gap-3 p-4">
-                <div className="flex items-start justify-between gap-2">
-                  <div>
-                    <h3 className="font-semibold">{c.title}</h3>
-                    {c.description && (
-                      <p className="text-sm text-zinc-500 dark:text-zinc-400">{c.description}</p>
-                    )}
-                  </div>
-                  {isMine && (
-                    <span className="shrink-0 rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-medium text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">
-                      Tu voto
-                    </span>
-                  )}
+              <div className="flex flex-col gap-3 px-1 pb-1 pt-4">
+                <div className="text-center">
+                  <h3 className="font-display text-xl font-bold leading-tight">{c.title}</h3>
+                  {c.description && <p className="mt-1 text-sm italic text-muted">{c.description}</p>}
                 </div>
 
                 {showResults ? (
                   <div>
                     <div className="mb-1 flex justify-between text-sm">
                       <span>{votes} votos</span>
-                      <span>{percent}%</span>
+                      <span className="font-semibold">{percent}%</span>
                     </div>
-                    <div className="h-2 w-full overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-800">
+                    <div className="h-2 w-full overflow-hidden rounded-full bg-line">
                       <div
-                        className="h-full rounded-full bg-emerald-500 transition-all"
+                        className="h-full rounded-full bg-accent transition-all"
                         style={{ width: `${percent}%` }}
                       />
                     </div>
@@ -130,7 +130,7 @@ export default function CategoryBoard({ category, user, authReady, status, onLog
                   <button
                     onClick={() => (user ? handleVote(c.id) : onLogin())}
                     disabled={!authReady || !isOpen || pending !== null}
-                    className="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-zinc-700 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-200"
+                    className="rounded-md bg-accent px-4 py-2 font-display font-semibold text-accent-ink transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     {status === "before"
                       ? `Abre a las ${formatTime(VOTING_OPENS_AT)}`
