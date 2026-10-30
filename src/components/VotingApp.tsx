@@ -121,12 +121,15 @@ export default function VotingApp({ categories }: { categories: Category[] }) {
             role="tab"
             aria-selected={c.id === active.id}
             onClick={() => setActiveId(c.id)}
-            className={`flex-1 rounded-lg px-4 py-2 text-sm font-medium transition ${
+            className={`flex flex-1 items-center justify-center gap-2 rounded-lg px-4 py-3 text-base font-semibold transition ${
               c.id === active.id
                 ? "bg-white text-zinc-900 shadow-sm dark:bg-zinc-700 dark:text-white"
                 : "text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white"
             }`}
           >
+            <span aria-hidden="true" className="text-2xl leading-none">
+              {c.icon}
+            </span>
             {c.name}
           </button>
         ))}

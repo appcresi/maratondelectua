@@ -12,6 +12,8 @@ export type Category = {
   /** Identificador de la categoría (solo letras, números y guiones). */
   id: string;
   name: string;
+  /** Emoji que se muestra en la pestaña. */
+  icon: string;
   description: string;
   candidates: Candidate[];
 };
@@ -21,6 +23,7 @@ export const categories: Category[] = [
   {
     id: "disfraces",
     name: "Disfraces",
+    icon: "🎭",
     description: "Vota por el personaje mejor caracterizado.",
     candidates: [
       { id: "personaje-1", title: "Personaje 1", src: "/fotos/personaje1.jpeg" },
@@ -30,6 +33,7 @@ export const categories: Category[] = [
   {
     id: "stands",
     name: "Stands",
+    icon: "🎪",
     description: "Vota por el stand más creativo.",
     candidates: [
       { id: "stand-1", title: "South Park", src: "/fotos/stand1.jpeg" },
