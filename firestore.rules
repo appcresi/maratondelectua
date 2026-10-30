@@ -3,11 +3,11 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Horario de votación: desde el 30/10/2026 17:00 hasta el 31/10/2026 13:00 (hora de Argentina, UTC-3).
+    // Horario de votación: desde el 30/10/2026 17:00 hasta el 02/11/2026 13:00 (hora de Argentina, UTC-3).
     // Valores en milisegundos; deben coincidir con src/data/schedule.ts.
     function votingOpen() {
       return request.time >= timestamp.value(1793390400000)
-        && request.time < timestamp.value(1793462400000);
+        && request.time < timestamp.value(1793635200000);
     }
 
     match /categories/{categoryId} {

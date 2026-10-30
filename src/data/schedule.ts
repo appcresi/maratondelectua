@@ -2,7 +2,7 @@
 // IMPORTANTE: si cambias estas fechas, actualiza también los valores
 // en milisegundos de firestore.rules (función votingOpen) y vuelve a publicarlas.
 export const VOTING_OPENS_AT = new Date("2026-10-30T17:00:00-03:00");
-export const VOTING_CLOSES_AT = new Date("2026-10-31T13:00:00-03:00");
+export const VOTING_CLOSES_AT = new Date("2026-11-02T13:00:00-03:00");
 
 export type VotingStatus = "before" | "open" | "closed";
 

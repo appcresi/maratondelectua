@@ -57,8 +57,11 @@ function Countdown({ now, status }: { now: number; status: VotingStatus }) {
 
   const target = status === "before" ? VOTING_OPENS_AT : VOTING_CLOSES_AT;
   const totalSeconds = Math.max(0, Math.floor((target.getTime() - now) / 1000));
+  const days = Math.floor(totalSeconds / 86400);
   const units = [
-    { value: Math.floor(totalSeconds / 3600), label: "horas" },
+    // Los días solo se muestran mientras falte al menos uno.
+    ...(days > 0 ? [{ value: days, label: days === 1 ? "día" : "días" }] : []),
+    { value: Math.floor((totalSeconds % 86400) / 3600), label: "horas" },
     { value: Math.floor((totalSeconds % 3600) / 60), label: "min" },
     { value: totalSeconds % 60, label: "seg" },
   ];
