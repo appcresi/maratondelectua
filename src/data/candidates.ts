@@ -48,6 +48,9 @@ export const categories: Category[] = [
       { id: "personaje-20", title: "Neo", description: "Matrix", src: "/fotos/personaje20.jpeg" },
       { id: "personaje-21", title: "Personaje 21", description: "Matrix", src: "/fotos/personaje21.jpeg" },
       { id: "personaje-22", title: "Alicia", description: "Alicia en el País de las Maravillas", src: "/fotos/personaje22.jpeg" },
+      { id: "personaje-23", title: "Personaje 23", description: "Terror", src: "/fotos/personaje23.jpeg" },
+      { id: "personaje-24", title: "Ghostface", description: "Scream", src: "/fotos/personaje24.jpeg" },
+      { id: "personaje-25", title: "Personaje 25", description: "Terror", src: "/fotos/personaje25.jpeg" },
     ],
   },
   {
@@ -77,6 +80,7 @@ export const categories: Category[] = [
       { id: "stand-19", title: "Gachiakuta", src: "/fotos/stand19.jpeg" },
       { id: "stand-20", title: "Leyendas del fútbol", src: "/fotos/stand20.jpeg" },
       { id: "stand-21", title: "Cars", src: "/fotos/stand21.jpeg" },
+      { id: "stand-22", title: "Terror", src: "/fotos/stand22.jpeg" },
     ],
   },
 ];
