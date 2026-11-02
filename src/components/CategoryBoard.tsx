@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore, type CSSProperties } from "react";
 import type { User } from "firebase/auth";
 import {
   AlreadyVotedError,
@@ -11,6 +11,7 @@ import {
 } from "@/lib/votes";
 import type { Category } from "@/data/candidates";
 import { VOTING_OPENS_AT, formatTime, type VotingStatus } from "@/data/schedule";
+import Podium from "./Podium";
 
 type Props = {
   category: Category;
@@ -31,6 +32,15 @@ const BURST = [
   { emoji: "🪶", dx: -60, dy: -170, rot: -45 },
   { emoji: "⭐", dx: 60, dy: -170, rot: 30 },
 ];
+
+// Con "?podio" en el link se ve el podio antes del cierre (para revisarlo).
+function usePodiumPreview() {
+  return useSyncExternalStore(
+    () => () => {},
+    () => new URLSearchParams(window.location.search).has("podio"),
+    () => false,
+  );
+}
 
 function prefersReducedMotion() {
   return typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -60,6 +70,8 @@ export default function CategoryBoard({ category, user, authReady, status, onLog
   const isOpen = status === "open";
   // Al cerrar la votación todos ven los resultados, hayan votado o no.
   const showResults = hasVoted || status === "closed";
+  const podiumPreview = usePodiumPreview();
+  const showPodium = status === "closed" || podiumPreview;
 
   // Animación FLIP: cuando cambia el ranking, cada tarjeta se desliza desde
   // su posición anterior a la nueva en lugar de saltar.
@@ -114,6 +126,8 @@ export default function CategoryBoard({ category, user, authReady, status, onLog
           {error}
         </p>
       )}
+
+      {showPodium && <Podium ranked={ranked} counts={counts} />}
 
       <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {ranked.map((c) => {
