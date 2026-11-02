@@ -31,24 +31,26 @@ export default function Mentions({ now }: { now: number }) {
 
   return (
     <section className="mb-8 animate-fade-up rounded-lg border border-line bg-card p-5 shadow-sm">
+      <h2 className="text-center font-display text-2xl font-bold sm:text-3xl">🎖️ Menciones especiales por curso</h2>
+
+      {revealed ? (
+        <p className="mt-2 text-center italic text-muted">¡Felicitaciones!</p>
+      ) : (
+        <div className="mt-3 text-center">
+          <p className="mb-3 italic text-muted">
+            Es un misterio… se revela el {formatDateTime(MENTIONS_REVEAL_AT)}.
+          </p>
+          <div className="flex justify-center">
+            <CountdownDigits now={now} target={MENTIONS_REVEAL_AT} />
+          </div>
+        </div>
+      )}
+
       {mentionGroups.map((group) => (
-        <div key={group.title} className="mb-8 last:mb-0">
-          <h2 className="text-center font-display text-2xl font-bold sm:text-3xl">🎖️ {group.title}</h2>
+        <div key={group.title} className="mt-10 border-t border-line pt-6 first:mt-8">
+          <h3 className="text-center font-display text-xl font-bold text-accent sm:text-2xl">{group.title}</h3>
 
-          {revealed ? (
-            <p className="mt-2 text-center italic text-muted">¡Felicitaciones!</p>
-          ) : (
-            <div className="mt-3 text-center">
-              <p className="mb-3 italic text-muted">
-                Es un misterio… se revela el {formatDateTime(MENTIONS_REVEAL_AT)}.
-              </p>
-              <div className="flex justify-center">
-                <CountdownDigits now={now} target={MENTIONS_REVEAL_AT} />
-              </div>
-            </div>
-          )}
-
-          <ol className="mx-auto mt-6 grid max-w-2xl grid-cols-3 items-end gap-3 sm:gap-6">
+          <ol className="mx-auto mt-4 grid max-w-2xl grid-cols-3 items-end gap-3 sm:gap-6">
             {group.mentions.map((m, i) => {
               const candidate = revealed ? findCandidate(m) : null;
               return (
@@ -60,9 +62,9 @@ export default function Mentions({ now }: { now: number }) {
                       <div className="relative aspect-[3/4] w-full overflow-hidden rounded-md border-2 border-gold shadow-lg">
                         <Image src={candidate.src} alt={candidate.title} fill sizes="200px" className="object-cover" />
                       </div>
-                      <h3 className="mt-2 line-clamp-2 font-display text-sm font-bold leading-tight sm:text-base">
+                      <h4 className="mt-2 line-clamp-2 font-display text-sm font-bold leading-tight sm:text-base">
                         {candidate.title}
-                      </h3>
+                      </h4>
                     </div>
                   ) : (
                     <>

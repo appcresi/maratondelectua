@@ -16,9 +16,44 @@ export type MentionGroup = {
   mentions: Mention[];
 };
 
+// Un grupo por curso, cada uno con 2 personajes y 1 stand.
+// Para cargar una mención, reemplaza `null` por el ID del participante
+// (por ejemplo "personaje-24" o "stand-21").
 export const mentionGroups: MentionGroup[] = [
   {
-    title: "Menciones especiales",
+    title: "1° año",
+    mentions: [
+      { label: "Personaje", categoryId: "disfraces", candidateId: null },
+      { label: "Personaje", categoryId: "disfraces", candidateId: null },
+      { label: "Stand", categoryId: "stands", candidateId: null },
+    ],
+  },
+  {
+    title: "2° año",
+    mentions: [
+      { label: "Personaje", categoryId: "disfraces", candidateId: null },
+      { label: "Personaje", categoryId: "disfraces", candidateId: null },
+      { label: "Stand", categoryId: "stands", candidateId: null },
+    ],
+  },
+  {
+    title: "3° año",
+    mentions: [
+      { label: "Personaje", categoryId: "disfraces", candidateId: null },
+      { label: "Personaje", categoryId: "disfraces", candidateId: null },
+      { label: "Stand", categoryId: "stands", candidateId: null },
+    ],
+  },
+  {
+    title: "4° año",
+    mentions: [
+      { label: "Personaje", categoryId: "disfraces", candidateId: null },
+      { label: "Personaje", categoryId: "disfraces", candidateId: null },
+      { label: "Stand", categoryId: "stands", candidateId: null },
+    ],
+  },
+  {
+    title: "5° año",
     mentions: [
       { label: "Personaje", categoryId: "disfraces", candidateId: null },
       { label: "Personaje", categoryId: "disfraces", candidateId: null },
